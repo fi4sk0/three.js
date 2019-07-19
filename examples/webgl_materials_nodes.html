@@ -46,7 +46,7 @@
 				spherical: { url: 'textures/envmap.png' }
 			};
 
-			var param = { example: new URL( window.location.href ).searchParams.get( 'e' ) || 'mesh-standard' };
+			var param = { example: new URL( window.location.href ).searchParams.get( 'e' ) || 'triplanar-mapping' };
 
 			function getTexture( name ) {
 
@@ -106,15 +106,18 @@
 				controls = new OrbitControls( camera, renderer.domElement );
 				controls.minDistance = 50;
 				controls.maxDistance = 200;
+				controls.enablePan = false;
 
 				scene.add( new THREE.AmbientLight( 0x464646 ) );
 
-				var light = new THREE.DirectionalLight( 0xffddcc, 1 );
-				light.position.set( 1, 0.75, 0.5 );
-				scene.add( light );
+				// var light = new THREE.PointLight( 0xffddcc, 1 );
+				// light.position.set( 20, 7.5, 0.5 );
+				// scene.add( new THREE.PointLightHelper( light ) );
+				// scene.add( light );
 
-				var light = new THREE.DirectionalLight( 0xccccff, 1 );
-				light.position.set( - 1, 0.75, - 0.5 );
+				var light = new THREE.PointLight( 0xccccff, 1 );
+				light.position.set( - 20, 7.5, - 0.5 );
+				scene.add( new THREE.PointLightHelper( light ) );
 				scene.add( light );
 
 				teapot = new TeapotBufferGeometry( 15, 18 );
@@ -131,7 +134,12 @@
 				updateMaterial();
 
 				onWindowResize();
+
 				animate();
+
+				document.addEventListener('keydown', () => {
+					mesh.rotation.x += 0.1;
+				})
 
 			}
 
@@ -2683,14 +2691,20 @@
 							"}"
 						].join( "\n" ) );
 
+
 						var triplanarMappingTexture = new Nodes.FunctionCallNode( triplanarMapping, {
 							texture: new Nodes.TextureNode( getTexture( "brick" ) ),
-							normal: new Nodes.NormalNode( Nodes.NormalNode.WORLD ),
-							position: new Nodes.PositionNode( Nodes.PositionNode.WORLD ),
+							normal: new Nodes.NormalNode( Nodes.NormalNode.LOCAL ),
+							position: new Nodes.PositionNode( Nodes.PositionNode.LOCAL ),
 							scale: scale,
 						} );
 
 						mtl.color = triplanarMappingTexture;
+
+						var triplanarNormalMapNode = new Nodes.TriplanarNormalMapNode(
+							new Nodes.TextureNode( getTexture( "decalNormal" )), new Nodes.Vector2Node(0.1, 0.1), new Nodes.FloatNode(-1));
+						
+						mtl.normal = triplanarNormalMapNode;
 
 						// GUI
 

@@ -71,6 +71,7 @@ export { TextureCubeUVNode } from './misc/TextureCubeUVNode.js';
 export { TextureCubeNode } from './misc/TextureCubeNode.js';
 export { NormalMapNode } from './misc/NormalMapNode.js';
 export { BumpMapNode } from './misc/BumpMapNode.js';
+export { TriplanarNormalMapNode } from './misc/TriplanarNormalMapNode.js';
 
 // utils
 

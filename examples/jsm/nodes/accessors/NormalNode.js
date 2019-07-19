@@ -44,9 +44,10 @@ NormalNode.prototype.generate = function ( builder, output ) {
 		case NormalNode.LOCAL:
 
 			// to use vObjectNormal as vertex normal
-			//builder.requires.normal = true;
+			builder.requires.normal = true;
 
-			result = 'normal';
+			// result = 'normal';
+			result = 'vObjectNormal';
 
 			break;
 
